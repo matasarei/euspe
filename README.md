@@ -1,2 +1,64 @@
 # euspe
-OOP interfaces for the EUSign PHP library
+OOP interfaces for the [EUSign PHP library](https://iit.com.ua/downloads).
+
+## Usage
+Similar to the demo provided with the library, but completely with OOP interfaces.
+
+Decrypt signed data:
+```php
+// EUSignTest.php \develop()
+$crypto = new Matasar\Euspe\Crypto(); // initializes the library
+$result = $crypto->develop('path/to/private_key', 'password', 'encrypted_data');
+
+var_dump($result->signInfo->data); // decrypted data
+```
+
+Hash data for signing:
+```php
+$crypto = new Matasar\Euspe\Crypto();
+$hash = $crypto->hash('path/to/private_key', true); // hash a file
+$hash = $crypto->hash('qwerty', false); // hash a string
+
+var_dump(base64_encode($hash));
+```
+
+## Tests and development
+The tests don't do any real cryptography testing, as this is only a wrapper for the library.
+
+1. Install vendors
+```bash
+docker run --rm -v $(pwd):/app -w /app composer:lts composer install --ignore-platform-reqs
+```
+> [!IMPORTANT]
+> The `--ignore-platform-reqs` flag is required to avoid the `ext-eusphpe` requirement.
+
+2. Run tests
+```bash
+docker run --rm -v $(pwd):/app -w /app composer:lts vendor/bin/phpunit
+```
+
+## Recommendations to install the EUSign library
+1. Unpack and copy library files:
+```sh
+cp .../eusphpe.ini /etc/php/7.4/mods-available/eusphpe.ini
+cp -R .../eusphpe /usr/lib/php/eusphpe_extension
+```
+`composer.json` includes `ext-eusphpe` requirement 
+2. Make symlinks to the configuration file:
+```sh
+ln -s /etc/php/7.4/mods-available/eusphpe.ini /etc/php/7.4/fpm/conf.d/20-eusphpe.ini
+ln -s /etc/php/7.4/mods-available/eusphpe.ini /etc/php/7.4/cli/conf.d/20-eusphpe.ini
+
+```
+3. Restart the FPM service
+4. If you have certificates install them (by default in `/data/certificates`, see `osplm.ini`):
+```sh
+ls -la /data/certificates/
+-rw-rw-r-- 1 root root 876543 Feb 24 2022 CACertificates.p7b
+-rw-rw-r-- 1 root root  12345 Feb 24 2022 CAs.json
+-rw-rw-r-- 1 root root   1234 Feb 24 2022 EU-xxxxxx.cer
+-rw-rw-r-- 1 root root   1234 Feb 24 2022 EU-xxxxxx.cer
+```
+
+> [!IMPORTANT]
+> You will likely need the original `osplm.ini` file and not the one which provided with the library demo.
