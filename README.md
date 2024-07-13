@@ -1,4 +1,6 @@
 # euspe
+![CI workflow](https://github.com/matasarei/euspe/actions/workflows/tests.yml/badge.svg)
+
 OOP interfaces for the [EUSign PHP library](https://iit.com.ua/downloads).
 
 ## Usage

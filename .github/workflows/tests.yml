@@ -28,4 +28,5 @@ jobs:
       - uses: php-actions/composer@v6
         with:
           php_version: ${{ matrix.php_version }}
+          command: install --ignore-platform-req=ext-eusphpe
       - run: vendor/bin/phpunit
