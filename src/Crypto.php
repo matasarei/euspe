@@ -23,8 +23,6 @@ class Crypto
     public function __construct()
     {
         if (!self::$initialized) {
-            ini_set('allow_call_time_pass_reference', 'On');
-
             $e = new ErrorHandler(InitializationException::class);
 
             $e->assert(euspe_setcharset(Encoding::UTF8), 'Failed to set charset');
