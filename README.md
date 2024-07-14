@@ -48,7 +48,6 @@ docker run --rm -v $(pwd):/app -w /app composer:lts vendor/bin/phpunit
 cp .../eusphpe.ini /etc/php/7.4/mods-available/eusphpe.ini
 cp -R .../eusphpe_extension /usr/lib/php/eusphpe_extension
 ```
-`composer.json` includes `ext-eusphpe` requirement 
 2. Make symlinks to the configuration file:
 ```sh
 ln -s /etc/php/7.4/mods-available/eusphpe.ini /etc/php/7.4/fpm/conf.d/20-eusphpe.ini
