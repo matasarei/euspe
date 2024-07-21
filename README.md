@@ -5,7 +5,7 @@ OOP interfaces for the [EUSign PHP library](https://iit.com.ua/downloads).
 The `eusphpe` extension is included in [releases](https://github.com/matasarei/euspe/releases).
 
 ## Usage
-Similar to the demo provided with the library, but completely with OOP interfaces.
+Similar to `euspe_*` functions, but with OOP interfaces.
 
 Decrypt signed data:
 ```php
@@ -20,7 +20,7 @@ Hash data for signing:
 ```php
 $crypto = new Matasar\Euspe\Crypto();
 
-$hash = $crypto->hash('path/to/private_key', true); // hash a file
+$hash = $crypto->hash('path/to/file', true); // hash a file
 var_dump(base64_encode($hash));
 
 $hash = $crypto->hash('qwerty', false); // hash a string
