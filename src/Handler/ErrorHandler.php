@@ -32,8 +32,6 @@ class ErrorHandler
         $errorCode = dechex($code);
         $errorMessage = strlen($title) > 0 ? $title . ': ' : '';
 
-        euspe_geterrdescr($errorCode, $errorMessage);
-
         $exception = new $this->exceptionClass($errorMessage, $errorCode);
 
         throw $exception;
