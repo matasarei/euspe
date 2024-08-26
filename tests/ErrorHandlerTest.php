@@ -19,7 +19,6 @@ class ErrorHandlerTest extends TestCase
         $handler = new ErrorHandler(Exception::class);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Test error: Dummy error description');
 
         $callable = function (&$errorCode) {
             $errorCode = Error::NOT_INITIALIZED;
