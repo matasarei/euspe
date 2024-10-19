@@ -21,16 +21,27 @@ class ErrorHandler
         $this->reset();
     }
 
-    public function assert(int $code, string $title = ''): void
+    public function assert(int $resultCode, string $title = ''): void
     {
-        if ($code === 0) {
+        if ($resultCode === 0) {
             $this->reset();
 
             return;
         }
 
-        $errorCode = dechex($code);
-        $errorMessage = strlen($title) > 0 ? $title . ': ' : '';
+        $errorCode = dechex($this->errorCode ?: $resultCode);
+        $errorMessage = '';
+        euspe_geterrdescr($errorCode, $errorMessage);
+
+        $errorMessage = sprintf(
+            'ERR %d: %s',
+            $errorCode,
+            $errorMessage
+        );
+
+        if (strlen($title) > 0) {
+            $errorMessage = $title . '; ' . $errorMessage;
+        }
 
         $exception = new $this->exceptionClass($errorMessage, $errorCode);
 

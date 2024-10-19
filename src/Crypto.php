@@ -15,6 +15,9 @@ use Throwable;
 
 class Crypto
 {
+    public const HASH_FILE = true;
+    public const HASH_DATA = false;
+
     static bool $initialized = false;
 
     /**
@@ -84,15 +87,12 @@ class Crypto
             throw $exception;
         }
 
-        $envData = base64_decode($protectedData);
-        $envSenderCert = $senderCert != null ? base64_decode($senderCert) : null;
-
         try {
             $e->assert(
                 euspe_ctxdevelopdata(
                     $r->privateKeyContext,
-                    $envData,
-                    $envSenderCert,
+                    $protectedData,
+                    $senderCert,
                     $r->envelopInfo->data,
                     $r->envelopInfo->signTime,
                     $r->envelopInfo->useTSP,
@@ -161,6 +161,46 @@ class Crypto
         $this->freeContext($e, $r);
 
         return $r;
+    }
+
+    public function verify(string $signature, string $hash): SignInfo
+    {
+        $e = new ErrorHandler(DecryptionException::class, Error::UNKNOWN);
+        $signInfo = new SignInfo();
+
+        try {
+            $e->assert(
+                euspe_verifyhashsign(
+                    $hash,
+                    $signature,
+                    $signInfo->signTime,
+                    $signInfo->useTSP,
+                    $signInfo->signerInfo->issuer,
+                    $signInfo->signerInfo->issuerCN,
+                    $signInfo->signerInfo->serial,
+                    $signInfo->signerInfo->subject,
+                    $signInfo->signerInfo->subjCN,
+                    $signInfo->signerInfo->subjOrg,
+                    $signInfo->signerInfo->subjOrgUnit,
+                    $signInfo->signerInfo->subjTitle,
+                    $signInfo->signerInfo->subjState,
+                    $signInfo->signerInfo->subjLocality,
+                    $signInfo->signerInfo->subjFullName,
+                    $signInfo->signerInfo->subjAddress,
+                    $signInfo->signerInfo->subjPhone,
+                    $signInfo->signerInfo->subjEMail,
+                    $signInfo->signerInfo->subjDNS,
+                    $signInfo->signerInfo->subjEDRPOUCode,
+                    $signInfo->signerInfo->subjDRFOCode,
+                    $e->errorCode
+                ),
+                'Failed to verify sign'
+            );
+        } catch (Throwable $exception) {
+            throw $exception;
+        }
+
+        return $signInfo;
     }
 
     private function freeContext(ErrorHandler $e, DevelopResult $r): void
