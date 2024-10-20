@@ -63,29 +63,29 @@ function euspe_hashfile(string $filePath, string &$hash, int &$errorCode): int
  * @param int $errorCode Output. Error code.
  * @return int
  */
-function euspe_signverify(string $data, ?string &$signTime, bool &$useTSP, string &$issuer, string &$issuerCN, string &$serial, string &$subject, string &$subjCN, string &$subjOrg, string &$subjOrgUnit, string &$subjTitle, string &$subjState, string &$subjLocality, string &$subjFullName, string &$subjAddress, string &$subjPhone, string &$subjEMail, string &$subjDNS, string &$subjEDRPOUCode, string &$subjDRFOCode, ?string &$signData, int &$errorCode): int
+function euspe_signverify(?string $data, ?string &$signTime, bool &$useTSP, string &$issuer, string &$issuerCN, string &$serial, string &$subject, string &$subjCN, string &$subjOrg, string &$subjOrgUnit, string &$subjTitle, string &$subjState, string &$subjLocality, string &$subjFullName, string &$subjAddress, string &$subjPhone, string &$subjEMail, string &$subjDNS, string &$subjEDRPOUCode, string &$subjDRFOCode, ?string &$signData, int &$errorCode): int
 {
-    $signTime = 'dummysigntime';
+    $signTime = date('m.d.Y H:i:s');
     $useTSP = true;
-    $issuer = 'dummyissuer';
-    $issuerCN = 'dummyissuercn';
-    $serial = 'dummyserial';
-    $subject = 'dummysubject';
-    $subjCN = 'dummysubjcn';
-    $subjOrg = 'dummysubjorg';
-    $subjOrgUnit = 'dummysubjorgunit';
-    $subjTitle = 'dummysubjtitle';
-    $subjState = 'dummysubjstate';
-    $subjLocality = 'dummysubjlocality';
-    $subjFullName = 'dummysubjfullname';
-    $subjAddress = 'dummysubjaddress';
-    $subjPhone = 'dummysubjphone';
-    $subjEMail = 'dummysubjemail';
-    $subjDNS = 'dummysubjdns';
-    $subjEDRPOUCode = 'dummysubjedrpoucode';
-    $subjDRFOCode = 'dummysubjdrfocode';
-    $signData = 'dummysigndata';
+    $issuer = 'O=Fake Company;CN="Fake CA". Qualified Trust Service Provider;Serial=UA-12345678-9101;C=UA;L=Kyiv;OI=NTRUA-12345678';
+    $issuerCN = '"Fake CA". Qualified Trust Service Provider';
+    $serial = '1234567890ABCDEF1234567890ABCDEF12345678';
+    $subject = 'CN=John Doe;SN=Doe;GivenName=John;Serial=TINUA-1234567890;C=UA';
+    $subjCN = 'John Doe';
+    $subjOrg = 'Fake Organization';
+    $subjOrgUnit = 'Fake Unit';
+    $subjTitle = 'Fake Title';
+    $subjState = 'Fake State';
+    $subjLocality = 'Fake Locality';
+    $subjFullName = 'John Doe';
+    $subjAddress = '123 Fake Street';
+    $subjPhone = '123-456-7890';
+    $subjEMail = 'john.doe@fakeemail.com';
+    $subjDNS = 'fake.dns.com';
+    $subjEDRPOUCode = '12345678';
+    $subjDRFOCode = '1234567890';
     $errorCode = 0x0000;
+
     return 0;
 }
 
@@ -155,26 +155,27 @@ function euspe_ctxenvelopdata(string $sPrivateKeyContext, array $aRecipientCerts
 function euspe_ctxdevelopdata(string $privateKeyContext, string $envData, string $envSenderCert = null, ?string &$data, ?string &$signTime, bool &$useTSP, string &$issuer, string &$issuerCN, string &$serial, string &$subject, string &$subjCN, string &$subjOrg, string &$subjOrgUnit, string &$subjTitle, string &$subjState, string &$subjLocality, string &$subjFullName, string &$subjAddress, string &$subjPhone, string &$subjEMail, string &$subjDNS, string &$subjEDRPOUCode, string &$subjDRFOCode, int &$errorCode): int
 {
     $data = 'dummydata';
-    $signTime = 'dummysigntime';
+    $signTime = date('m.d.Y H:i:s');
     $useTSP = true;
-    $issuer = 'dummyissuer';
-    $issuerCN = 'dummyissuercn';
-    $serial = 'dummyserial';
-    $subject = 'dummysubject';
-    $subjCN = 'dummysubjcn';
-    $subjOrg = 'dummysubjorg';
-    $subjOrgUnit = 'dummysubjorgunit';
-    $subjTitle = 'dummysubjtitle';
-    $subjState = 'dummysubjstate';
-    $subjLocality = 'dummysubjlocality';
-    $subjFullName = 'dummysubjfullname';
-    $subjAddress = 'dummysubjaddress';
-    $subjPhone = 'dummysubjphone';
-    $subjEMail = 'dummysubjemail';
-    $subjDNS = 'dummysubjdns';
-    $subjEDRPOUCode = 'dummysubjedrpoucode';
-    $subjDRFOCode = 'dummysubjdrfocode';
+    $issuer = 'O=Fake Company;CN="Fake CA". Qualified Trust Service Provider;Serial=UA-12345678-9101;C=UA;L=Kyiv;OI=NTRUA-12345678';
+    $issuerCN = '"Fake CA". Qualified Trust Service Provider';
+    $serial = '1234567890ABCDEF1234567890ABCDEF12345678';
+    $subject = 'CN=John Doe;SN=Doe;GivenName=John;Serial=TINUA-1234567890;C=UA';
+    $subjCN = 'John Doe';
+    $subjOrg = 'Fake Organization';
+    $subjOrgUnit = 'Fake Unit';
+    $subjTitle = 'Fake Title';
+    $subjState = 'Fake State';
+    $subjLocality = 'Fake Locality';
+    $subjFullName = 'John Doe';
+    $subjAddress = '123 Fake Street';
+    $subjPhone = '123-456-7890';
+    $subjEMail = 'john.doe@fakeemail.com';
+    $subjDNS = 'fake.dns.com';
+    $subjEDRPOUCode = '12345678';
+    $subjDRFOCode = '1234567890';
     $errorCode = 0x0000;
+
     return 0;
 }
 
@@ -343,12 +344,33 @@ function euspe_signhash(string &$sHash, string &$sSign, int &$iErrorCode): int
     return 0;
 }
 
-function euspe_verifyhashsign(string &$sHash, string &$sSign, string $sSignTime, bool $bUseTSP, string &$sIssuer, string &$sIssuerCN, string &$sSerial, string &$sSubject, string &$sSubjCN, string &$sSubjOrg, string &$sSubjOrgUnit, string &$sSubjTitle, string &$sSubjState, string &$sSubjLocality, string &$sSubjFullName, string &$sSubjAddress, string &$sSubjPhone, string &$sSubjEMail, string &$sSubjDNS, string &$sSubjEDRPOUCode, string &$sSubjDRFOCode, int &$iErrorCode): int
+function euspe_verifyhashsign(string &$sHash, string &$sSign, ?string $sSignTime, bool $bUseTSP, string &$sIssuer, string &$sIssuerCN, string &$sSerial, string &$sSubject, string &$sSubjCN, string &$sSubjOrg, string &$sSubjOrgUnit, string &$sSubjTitle, string &$sSubjState, string &$sSubjLocality, string &$sSubjFullName, string &$sSubjAddress, string &$sSubjPhone, string &$sSubjEMail, string &$sSubjDNS, string &$sSubjEDRPOUCode, string &$sSubjDRFOCode, int &$iErrorCode): int
 {
+    $signTime = date('m.d.Y H:i:s');
+    $useTSP = true;
+    $issuer = 'O=Fake Company;CN="Fake CA". Qualified Trust Service Provider;Serial=UA-12345678-9101;C=UA;L=Kyiv;OI=NTRUA-12345678';
+    $issuerCN = '"Fake CA". Qualified Trust Service Provider';
+    $serial = '1234567890ABCDEF1234567890ABCDEF12345678';
+    $subject = 'CN=John Doe;SN=Doe;GivenName=John;Serial=TINUA-1234567890;C=UA';
+    $subjCN = 'John Doe';
+    $subjOrg = 'Fake Organization';
+    $subjOrgUnit = 'Fake Unit';
+    $subjTitle = 'Fake Title';
+    $subjState = 'Fake State';
+    $subjLocality = 'Fake Locality';
+    $subjFullName = 'John Doe';
+    $subjAddress = '123 Fake Street';
+    $subjPhone = '123-456-7890';
+    $subjEMail = 'john.doe@fakeemail.com';
+    $subjDNS = 'fake.dns.com';
+    $subjEDRPOUCode = '12345678';
+    $subjDRFOCode = '1234567890';
+    $errorCode = 0x0000;
+
     return 0;
 }
 
-function euspe_verifyhashsignontime(string &$sHash, int $iSignIndex, string &$sSign, string $sOnTime, bool $bOffline, bool $bNoCRL, string &$sSignTime, bool $bUseTSP, string &$sIssuer, string &$sIssuerCN, string &$sSerial, string &$sSubject, string &$sSubjCN, string &$sSubjOrg, string &$sSubjOrgUnit, string &$sSubjTitle, string &$sSubjState, string &$sSubjLocality, string &$sSubjFullName, string &$sSubjAddress, string &$sSubjPhone, string &$sSubjEMail, string &$sSubjDNS, string &$sSubjEDRPOUCode, string &$sSubjDRFOCode, int &$iErrorCode): int
+function euspe_verifyhashsignontime(string &$sHash, int $iSignIndex, string &$sSign, ?string $sOnTime, bool $bOffline, bool $bNoCRL, string &$sSignTime, bool $bUseTSP, string &$sIssuer, string &$sIssuerCN, string &$sSerial, string &$sSubject, string &$sSubjCN, string &$sSubjOrg, string &$sSubjOrgUnit, string &$sSubjTitle, string &$sSubjState, string &$sSubjLocality, string &$sSubjFullName, string &$sSubjAddress, string &$sSubjPhone, string &$sSubjEMail, string &$sSubjDNS, string &$sSubjEDRPOUCode, string &$sSubjDRFOCode, int &$iErrorCode): int
 {
     return 0;
 }
@@ -378,7 +400,7 @@ function euspe_signverifyextontime(string &$sData, int $iSignIndex, string &$sSi
     return 0;
 }
 
-function euspe_createemptysign(string &$sData, string &$sSign, int &$iErrorCode): int
+function euspe_createemptysign(?string &$sData, string &$sSign, int &$iErrorCode): int
 {
     return 0;
 }
@@ -388,7 +410,7 @@ function euspe_createsigner(string &$sHash, string &$sSigner, int &$iErrorCode):
     return 0;
 }
 
-function euspe_appendsigner(string &$sSigner, string &$sSignerCert, string &$sPreviousSign, string &$sSign, int &$iErrorCode): int
+function euspe_appendsigner(string &$sSigner, ?string &$sSignerCert, string &$sPreviousSign, string &$sSign, int &$iErrorCode): int
 {
     return 0;
 }

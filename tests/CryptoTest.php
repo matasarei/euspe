@@ -2,6 +2,7 @@
 
 use Matasar\Euspe\Crypto;
 use Matasar\Euspe\Dto\DevelopResult;
+use Matasar\Euspe\Dto\SignInfo;
 use PHPUnit\Framework\TestCase;
 
 class CryptoTest extends TestCase
@@ -33,5 +34,12 @@ class CryptoTest extends TestCase
 
         $hash = $this->crypto->hash(__FILE__, true);
         $this->assertNotEmpty($hash);
+    }
+
+    public function testVerify()
+    {
+        $result = $this->crypto->verify('signature', 'hash');
+
+        $this->assertInstanceOf(SignInfo::class, $result);
     }
 }
