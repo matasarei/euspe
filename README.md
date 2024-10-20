@@ -11,20 +11,38 @@ Decrypt signed data:
 ```php
 $crypto = new Matasar\Euspe\Crypto(); // initializes the library
 
-// EUSignTest.php \develop()
-$result = $crypto->develop('path/to/private_key', 'password', 'encrypted_data');
-var_dump($result->signInfo->data); // decrypted data
+try {
+    // EUSignTest.php \develop()
+    $result = $crypto->develop('path/to/private_key', 'password', 'encrypted_data');
+    var_dump($result->signInfo->data); // decrypted data
+} catch (\Matasar\Euspe\Exception\DecryptionException $e) {
+    //...
+}
 ```
 
 Hash data for signing:
 ```php
 $crypto = new Matasar\Euspe\Crypto();
+try {
+    $hash = $crypto->hash('path/to/private_key', Matasar\Euspe\Crypto::HASH_FILE);
+    var_dump(base64_encode($hash));
+    
+    $hash = $crypto->hash('qwerty', Matasar\Euspe\Crypto::HASH_DATA); // hash string
+    var_dump(base64_encode($hash));
+} catch (\Matasar\Euspe\Exception\EncryptionException $e) {
+    //...
+}
+```
 
-$hash = $crypto->hash('path/to/private_key', Matasar\Euspe\Crypto::HASH_FILE);
-var_dump(base64_encode($hash));
-
-$hash = $crypto->hash('qwerty', Matasar\Euspe\Crypto::HASH_DATA); // hash string
-var_dump(base64_encode($hash));
+Validating signature by hash:
+```php
+$crypto = new Matasar\Euspe\Crypto();
+try {
+    /** @var \Matasar\Euspe\Dto\SignInfo $info */
+    $info = $crypto->verify('signature', 'hash');
+} catch (\Matasar\Euspe\Exception\DecryptionException $e) {
+    //...
+}
 ```
 
 ## Tests and development
