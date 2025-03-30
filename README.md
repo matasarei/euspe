@@ -24,9 +24,9 @@ Hash data for signing:
 ```php
 $crypto = new Matasar\Euspe\Crypto();
 try {
-    $hash = $crypto->hash('path/to/private_key', Matasar\Euspe\Crypto::HASH_FILE);
+    $hash = $crypto->hash('path/to/file', Matasar\Euspe\Crypto::HASH_FILE);
     var_dump(base64_encode($hash));
-    
+
     $hash = $crypto->hash('qwerty', Matasar\Euspe\Crypto::HASH_DATA); // hash string
     var_dump(base64_encode($hash));
 } catch (\Matasar\Euspe\Exception\EncryptionException $e) {
