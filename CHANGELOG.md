@@ -7,6 +7,8 @@
   that take it: `Hasher`, `SignatureVerifier` and `EnvelopeDeveloper`.
 - PHP `~7.4.0 || ^8.1`. PHP 8.0 is excluded because IIT ships no `eusphpe` build for it.
 - `develop()` takes a `Dto\PrivateKey` (key file **contents** and password) instead of two strings.
+  It hides both from `var_dump()` and `print_r()`, and `serialize()`/`unserialize()` throw
+  `EuspeException`, so a key cannot be cached or queued by accident.
 - DTO constructors take every field: `SignInfo` and `EnvelopInfo` are
   `__construct(?string $signTime, bool $useTSP, ?string $data, CertInfo $signerInfo|$senderInfo)`, and `CertInfo` is
   built with `CertInfo::fromArray()`. A bare `new SignInfo()` or `new EnvelopInfo()`, in test fakes
