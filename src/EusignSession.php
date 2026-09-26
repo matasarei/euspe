@@ -9,6 +9,8 @@ use Matasar\Euspe\Handler\ErrorHandler;
 /**
  * The EUSign library is process-wide: it is initialised once per process, however many sessions and
  * services are built, and finalised only by an explicit close(). Nothing is finalised on destruct.
+ * Under PHP-FPM this state lives only for one request, so init runs once per request; the extension
+ * accepts a repeated init without a finalize (checked on IIT's 7.4 build).
  */
 final class EusignSession
 {

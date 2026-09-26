@@ -18,8 +18,8 @@
 
 ### Fixed
 - The library was initialised on every `new Crypto()` and finalised on every destruct, so two
-  overlapping instances tore it down under each other. It is now initialised once per process and
-  finalised only by an explicit `EusignSession::close()`.
+  overlapping instances tore it down under each other. It is now initialised once per process
+  (once per request under PHP-FPM) and finalised only by an explicit `EusignSession::close()`.
 - Error codes went through `dechex()` and back: `0x33` was reported as 33, and codes with a hex
   letter such as `0xFF` raised a `TypeError` instead of the library's error.
 - `develop()` frees its contexts in `finally`. A failure while freeing no longer replaces the

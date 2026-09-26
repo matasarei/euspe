@@ -17,7 +17,8 @@ composer require matasarei/euspe
 
 ## Usage
 Build one `EusignSession` and inject it into the services you need. The library is initialised once
-per process, the first time a service uses it, however many sessions and services you build.
+per process (once per request under PHP-FPM), the first time a service uses it, however many
+sessions and services you build.
 
 ```php
 use Matasar\Euspe\EnvelopeDeveloper;
