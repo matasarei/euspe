@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 (unreleased)
+## 2.0.0 (2026-09-27)
 
 ### Breaking
 - `Crypto` is removed. The library is split into a process-wide `EusignSession` and three services
