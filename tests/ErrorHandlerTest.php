@@ -109,6 +109,17 @@ class ErrorHandlerTest extends TestCase
         $handler->assert(1);
     }
 
+    public function testZeroErrorCodeOnFailureFallsBackToTheResultCode(): void
+    {
+        $handler = new ErrorHandler(Exception::class, Error::UNKNOWN);
+        $handler->errorCode = Error::NONE;
+
+        $this->expectExceptionMessage('ERR 0x0003: Dummy error description');
+        $this->expectExceptionCode(3);
+
+        $handler->assert(Error::LIBRARY_LOAD);
+    }
+
     public function testReset(): void
     {
         $handler = new ErrorHandler(Exception::class);
