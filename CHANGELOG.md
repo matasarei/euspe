@@ -8,7 +8,7 @@
 - PHP `~7.4.0 || ^8.1`. PHP 8.0 is excluded because IIT ships no `eusphpe` build for it.
 - `develop()` takes a `Dto\PrivateKey` (key file **contents** and password) instead of two strings.
 - DTO constructors take every field: `SignInfo` and `EnvelopInfo` are
-  `__construct(?string $signTime, bool $useTSP, ?string $data, CertInfo $certInfo)`, and `CertInfo` is
+  `__construct(?string $signTime, bool $useTSP, ?string $data, CertInfo $signerInfo|$senderInfo)`, and `CertInfo` is
   built with `CertInfo::fromArray()`. A bare `new SignInfo()` or `new EnvelopInfo()`, in test fakes
   for example, no longer works. `DevelopResult` no longer exposes `context` and `privateKeyContext`,
   which pointed to contexts already freed.
