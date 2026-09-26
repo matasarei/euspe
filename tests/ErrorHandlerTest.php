@@ -79,6 +79,36 @@ class ErrorHandlerTest extends TestCase
         $handler->assert(2);
     }
 
+    /**
+     * The extension returns a code without setting the out-parameter when the library is not initialised;
+     * 1.x and early 2.0 reported the untouched default instead, as "ERR 0xFFFF" with an empty description.
+     */
+    public function testResultCodeIsUsedWhenTheErrorCodeWasLeftAtItsDefault(): void
+    {
+        $handler = new ErrorHandler(Exception::class, Error::UNKNOWN);
+
+        try {
+            $handler->assert(Error::LIBRARY_LOAD, 'Test error');
+            $this->fail('No exception thrown');
+        } catch (Exception $e) {
+            $this->assertSame('Test error; ERR 0x0003: Dummy error description', $e->getMessage());
+            $this->assertSame(3, $e->getCode());
+        }
+
+        $this->assertSame([['euspe_geterrdescr', [3]]], EuspeStub::$calls);
+    }
+
+    public function testErrorCodeSetByTheExtensionWinsOverTheResultCode(): void
+    {
+        $handler = new ErrorHandler(Exception::class, Error::UNKNOWN);
+        $handler->errorCode = Error::BAD_SIGNATURE;
+
+        $this->expectExceptionMessage('ERR 0x0023: Dummy error description');
+        $this->expectExceptionCode(0x23);
+
+        $handler->assert(1);
+    }
+
     public function testReset(): void
     {
         $handler = new ErrorHandler(Exception::class);

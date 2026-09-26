@@ -25,6 +25,9 @@
   (once per request under PHP-FPM) and finalised only by an explicit `EusignSession::close()`.
 - Error codes went through `dechex()` and back: `0x33` was reported as 33, and codes with a hex
   letter such as `0xFF` raised a `TypeError` instead of the library's error.
+- A failure the extension reports only through its return value, without setting the error code
+  (for example, when the library is not initialised), showed as `ERR 0xFFFF` with an empty
+  description. It now shows the real code, such as `ERR 0x0003`.
 - `develop()` frees its contexts in `finally`. A failure while freeing no longer replaces the
   original exception, and a context that was never created is no longer freed.
 - No implicitly nullable parameters (deprecated in PHP 8.4).

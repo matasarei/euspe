@@ -29,7 +29,8 @@ class ErrorHandler
             return;
         }
 
-        $errorCode = $this->errorCode ?: $resultCode;
+        // The extension leaves the out-parameter untouched for some failures, e.g. when not initialised
+        $errorCode = $this->errorCode !== $this->errorDefault ? $this->errorCode : $resultCode;
         $errorMessage = '';
         euspe_geterrdescr($errorCode, $errorMessage);
 

@@ -9,18 +9,34 @@ final class EuspeStub
     public static array $calls = [];
     /** @var array<string, int> function name => error code to fail with */
     public static array $failures = [];
+    /** @var array<string, bool> functions that fail without setting their error code out-parameter */
+    public static array $silentFailures = [];
     public static string $hash = 'dummyhash';
 
     public static function reset(): void
     {
         self::$calls = [];
         self::$failures = [];
+        self::$silentFailures = [];
         self::$hash = 'dummyhash';
     }
 
-    public static function failOn(string $function, int $errorCode): void
+    /**
+     * @param bool $silent return the code without setting the error code out-parameter, as the extension
+     *                     does when the library is not initialised
+     */
+    public static function failOn(string $function, int $errorCode, bool $silent = false): void
     {
         self::$failures[$function] = $errorCode;
+        self::$silentFailures[$function] = $silent;
+    }
+
+    /**
+     * @return int what a failing function leaves in its error code out-parameter
+     */
+    public static function reportedCode(string $function, int $current): int
+    {
+        return (self::$silentFailures[$function] ?? false) ? $current : self::$failures[$function];
     }
 
     /**
@@ -45,7 +61,7 @@ final class EuspeStub
 function euspe_init(int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__)) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
@@ -82,7 +98,7 @@ function euspe_setcharset(int $iCharset): int
 function euspe_hashdata(string $data, string &$hash, int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__, [$data])) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
@@ -94,7 +110,7 @@ function euspe_hashdata(string $data, string &$hash, int &$errorCode): int
 function euspe_hashfile(string $filePath, string &$hash, int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__, [$filePath])) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
@@ -133,7 +149,7 @@ function euspe_hashfile(string $filePath, string &$hash, int &$errorCode): int
 function euspe_signverify(?string $data, ?string &$signTime, bool &$useTSP, string &$issuer, string &$issuerCN, string &$serial, string &$subject, string &$subjCN, string &$subjOrg, string &$subjOrgUnit, string &$subjTitle, string &$subjState, string &$subjLocality, string &$subjFullName, string &$subjAddress, string &$subjPhone, string &$subjEMail, string &$subjDNS, string &$subjEDRPOUCode, string &$subjDRFOCode, ?string &$signData, int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__, [$data])) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
@@ -164,7 +180,7 @@ function euspe_signverify(?string $data, ?string &$signTime, bool &$useTSP, stri
 function euspe_ctxcreate(?string &$context, int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__)) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
@@ -185,7 +201,7 @@ function euspe_ctxfree(string $sContext): int
 function euspe_ctxreadprivatekeybinary(string $context, string $privateKey, string $privateKeyPassword, ?string &$privateKeyContext, int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__, [$context, $privateKey, $privateKeyPassword])) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
@@ -245,7 +261,7 @@ function euspe_ctxenvelopdata(string $sPrivateKeyContext, array $aRecipientCerts
 function euspe_ctxdevelopdata(string $privateKeyContext, string $envData, ?string $envSenderCert, ?string &$data, ?string &$signTime, bool &$useTSP, string &$issuer, string &$issuerCN, string &$serial, string &$subject, string &$subjCN, string &$subjOrg, string &$subjOrgUnit, string &$subjTitle, string &$subjState, string &$subjLocality, string &$subjFullName, string &$subjAddress, string &$subjPhone, string &$subjEMail, string &$subjDNS, string &$subjEDRPOUCode, string &$subjDRFOCode, int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__, [$privateKeyContext, $envData, $envSenderCert])) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
@@ -442,7 +458,7 @@ function euspe_signhash(string &$sHash, string &$sSign, int &$iErrorCode): int
 function euspe_verifyhashsign(string &$sHash, string &$sSign, ?string &$signTime, bool &$useTSP, string &$issuer, string &$issuerCN, string &$serial, string &$subject, string &$subjCN, string &$subjOrg, string &$subjOrgUnit, string &$subjTitle, string &$subjState, string &$subjLocality, string &$subjFullName, string &$subjAddress, string &$subjPhone, string &$subjEMail, string &$subjDNS, string &$subjEDRPOUCode, string &$subjDRFOCode, int &$errorCode): int
 {
     if (($failure = EuspeStub::call(__FUNCTION__, [$sHash, $sSign])) !== null) {
-        $errorCode = $failure;
+        $errorCode = EuspeStub::reportedCode(__FUNCTION__, $errorCode);
         return $failure;
     }
 
