@@ -36,6 +36,9 @@ $developer = new EnvelopeDeveloper($session);
 Every value going in and out is **raw binary** unless it is text (names, times, decrypted data).
 Encode with `base64_encode()` yourself when you store or send it.
 
+The charset belongs to the library, not to one session: while it is open, a session with a different
+charset throws `InitializationException` on first use. Pick one charset for the whole application.
+
 Hash data or a file for signing:
 ```php
 $hash = $hasher->hashData('qwerty');          // raw binary
@@ -79,7 +82,8 @@ Every exception extends `Matasar\Euspe\Exception\EuspeException`; `getCode()` is
 (see `Matasar\Euspe\Enum\Error`), shown in the message as `ERR 0x%04X`.
 
 The library stays initialised until the process ends. A long-running worker that needs to release
-it can call `$session->close()`; the next service call opens it again.
+it can call `$session->close()`; the next service call opens it again. `close()` is also the way back
+if other code calls `euspe_finalize()` directly: until then, every call fails with `ERR 0x0003`.
 
 ## Upgrading from 1.x
 `new Crypto()` is gone: build one `EusignSession` and inject it into `Hasher`, `SignatureVerifier` and
