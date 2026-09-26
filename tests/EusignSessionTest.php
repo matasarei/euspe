@@ -3,7 +3,9 @@
 use Matasar\Euspe\Dto\PrivateKey;
 use Matasar\Euspe\EnvelopeDeveloper;
 use Matasar\Euspe\Enum\Encoding;
+use Matasar\Euspe\Enum\Error;
 use Matasar\Euspe\EusignSession;
+use Matasar\Euspe\Exception\EncryptionException;
 use Matasar\Euspe\Exception\EuspeException;
 use Matasar\Euspe\Exception\InitializationException;
 use Matasar\Euspe\Hasher;
@@ -102,6 +104,46 @@ class EusignSessionTest extends TestCase
         (new EusignSession())->close();
 
         $this->assertSame([], EuspeStub::$calls);
+    }
+
+    /**
+     * Someone calls euspe_finalize() behind the session's back: calls fail with the real code, and close()
+     * tolerates the library being off already, so the next call initialises it again.
+     */
+    public function testRecoversFromAFinalizeBehindItsBack(): void
+    {
+        $session = new EusignSession();
+        $hasher = new Hasher($session);
+        $hasher->hashData('qwerty');
+
+        EuspeStub::failOn('euspe_hashdata', Error::LIBRARY_LOAD, true);
+        EuspeStub::failOn('euspe_finalize', Error::LIBRARY_LOAD);
+
+        try {
+            $hasher->hashData('qwerty');
+            $this->fail('No exception thrown');
+        } catch (EncryptionException $e) {
+            $this->assertSame('Failed to hash data; ERR 0x0003: Dummy error description', $e->getMessage());
+            $this->assertSame(Error::LIBRARY_LOAD, $e->getCode());
+        }
+
+        $session->close();
+
+        EuspeStub::reset();
+        $this->assertSame('dummyhash', $hasher->hashData('qwerty'));
+        $this->assertSame(['euspe_setcharset', 'euspe_init', 'euspe_hashdata'], EuspeStub::calledFunctions());
+    }
+
+    public function testCloseStillReportsOtherFinalizeFailures(): void
+    {
+        $session = new EusignSession();
+        $session->open();
+        EuspeStub::failOn('euspe_finalize', Error::BAD_PARAMETER);
+
+        $this->expectException(InitializationException::class);
+        $this->expectExceptionMessage('Failed to finalize cryptographic library; ERR 0x0002: Dummy error description');
+
+        $session->close();
     }
 
     public function testInitFailureLeavesTheSessionClosed(): void

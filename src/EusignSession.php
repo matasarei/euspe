@@ -3,6 +3,7 @@
 namespace Matasar\Euspe;
 
 use Matasar\Euspe\Enum\Encoding;
+use Matasar\Euspe\Enum\Error;
 use Matasar\Euspe\Exception\InitializationException;
 use Matasar\Euspe\Handler\ErrorHandler;
 
@@ -11,6 +12,9 @@ use Matasar\Euspe\Handler\ErrorHandler;
  * services are built, and finalised only by an explicit close(). Nothing is finalised on destruct.
  * Under PHP-FPM this state lives only for one request, so init runs once per request; the extension
  * accepts a repeated init without a finalize (checked on IIT's 7.4 build).
+ *
+ * If other code calls euspe_finalize() directly, service calls fail with ERR 0x0003 until close() is
+ * called; close() accepts a library that is already off, and the next call initialises it again.
  */
 final class EusignSession
 {
@@ -57,8 +61,14 @@ final class EusignSession
         }
 
         self::$openCharset = null;
+        $result = euspe_finalize();
+
+        // Already finalised by someone calling euspe_finalize() directly: closed is what was asked for
+        if ($result === Error::LIBRARY_LOAD) {
+            return;
+        }
 
         $e = new ErrorHandler(InitializationException::class);
-        $e->assert(euspe_finalize(), 'Failed to finalize cryptographic library');
+        $e->assert($result, 'Failed to finalize cryptographic library');
     }
 }

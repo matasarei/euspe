@@ -28,6 +28,8 @@
 - A failure the extension reports only through its return value, without setting the error code
   (for example, when the library is not initialised), showed as `ERR 0xFFFF` with an empty
   description. It now shows the real code, such as `ERR 0x0003`.
+- `EusignSession::close()` no longer throws when other code has already called `euspe_finalize()`.
+  Calling it recovers from that, and the next service call initialises the library again.
 - `develop()` frees its contexts in `finally`. A failure while freeing no longer replaces the
   original exception, and a context that was never created is no longer freed.
 - No implicitly nullable parameters (deprecated in PHP 8.4).
