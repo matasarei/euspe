@@ -2,8 +2,6 @@
 
 namespace Matasar\Euspe\Exception;
 
-use RuntimeException;
-
-class InitializationException extends RuntimeException
+class InitializationException extends EuspeException
 {
 }

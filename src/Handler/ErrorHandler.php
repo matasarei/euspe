@@ -29,12 +29,12 @@ class ErrorHandler
             return;
         }
 
-        $errorCode = dechex($this->errorCode ?: $resultCode);
+        $errorCode = $this->errorCode ?: $resultCode;
         $errorMessage = '';
         euspe_geterrdescr($errorCode, $errorMessage);
 
         $errorMessage = sprintf(
-            'ERR %d: %s',
+            'ERR 0x%04X: %s',
             $errorCode,
             $errorMessage
         );
@@ -43,12 +43,10 @@ class ErrorHandler
             $errorMessage = $title . '; ' . $errorMessage;
         }
 
-        $exception = new $this->exceptionClass($errorMessage, $errorCode);
-
-        throw $exception;
+        throw new $this->exceptionClass($errorMessage, $errorCode);
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->errorCode = $this->errorDefault;
     }

@@ -2,10 +2,11 @@
 
 namespace Matasar\Euspe\Dto;
 
+/**
+ * Properties are read-only by convention.
+ */
 class DevelopResult
 {
-    public ?string $context = null;
-    public ?string $privateKeyContext = null;
     public EnvelopInfo $envelopInfo;
     public SignInfo $signInfo;
 
