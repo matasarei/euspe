@@ -29,12 +29,15 @@ class ErrorHandler
             return;
         }
 
-        $errorCode = dechex($this->errorCode ?: $resultCode);
+        // The extension leaves the out-parameter untouched for some failures, e.g. when not initialised;
+        // a zero there is no error code either
+        $isSet = $this->errorCode !== $this->errorDefault && $this->errorCode !== Error::NONE;
+        $errorCode = $isSet ? $this->errorCode : $resultCode;
         $errorMessage = '';
         euspe_geterrdescr($errorCode, $errorMessage);
 
         $errorMessage = sprintf(
-            'ERR %d: %s',
+            'ERR 0x%04X: %s',
             $errorCode,
             $errorMessage
         );
@@ -43,12 +46,10 @@ class ErrorHandler
             $errorMessage = $title . '; ' . $errorMessage;
         }
 
-        $exception = new $this->exceptionClass($errorMessage, $errorCode);
-
-        throw $exception;
+        throw new $this->exceptionClass($errorMessage, $errorCode);
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->errorCode = $this->errorDefault;
     }

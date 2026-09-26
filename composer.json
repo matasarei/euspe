@@ -1,6 +1,6 @@
 {
   "name": "matasarei/euspe",
-  "description": "OOP interfaces for the EUSign PHP library",
+  "description": "OOP wrapper for the IIT EUSign PHP extension (eusphpe)",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=7.4",
+    "php": "~7.4.0 || ^8.1",
     "ext-eusphpe": "*"
   },
   "autoload": {

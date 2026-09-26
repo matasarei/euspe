@@ -2,8 +2,6 @@
 
 namespace Matasar\Euspe\Exception;
 
-use LogicException;
-
-class DecryptionException extends LogicException
+class DecryptionException extends EuspeException
 {
 }

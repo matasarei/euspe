@@ -2,15 +2,23 @@
 
 namespace Matasar\Euspe\Dto;
 
+/**
+ * Properties are read-only by convention.
+ */
 class EnvelopInfo
 {
-    public ?string $signTime = null;
-    public bool $useTSP = false;
-    public ?string $data = null;
+    /** Signature time, MM.DD.YYYY HH:ii:ss */
+    public ?string $signTime;
+    public bool $useTSP;
+    /** Decrypted data */
+    public ?string $data;
     public CertInfo $senderInfo;
 
-    function __construct()
+    public function __construct(?string $signTime, bool $useTSP, ?string $data, CertInfo $senderInfo)
     {
-        $this->senderInfo = new CertInfo();
+        $this->signTime = $signTime;
+        $this->useTSP = $useTSP;
+        $this->data = $data;
+        $this->senderInfo = $senderInfo;
     }
 }
